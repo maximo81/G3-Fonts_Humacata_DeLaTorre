@@ -7,4 +7,4 @@ Humacata, Fermín Maximiliano       Fermin.Humacata@alu.frt.utn.edu.ar
 de la Torre, Máximo César          Maximo.DeLaTorre@alu.frt.utn.edu.ar
 
 
-GIT: https://github.com/fontsignacio/CentroEstetica.git
+GIT: https://github.com/maximo81/G3-Fonts_Humacata_DeLaTorre.git
