@@ -1,0 +1,10 @@
+Alumnos:                           Mail:
+
+Fonts, Ignacio Esteban             Ignacio.Fonts@alu.frt.utn.edu.ar
+
+Humacata, Fermín Maximiliano       Fermin.Humacata@alu.frt.utn.edu.ar
+
+de la Torre, Máximo César          Maximo.DeLaTorre@alu.frt.utn.edu.ar
+
+
+GIT: https://github.com/fontsignacio/CentroEstetica.git
