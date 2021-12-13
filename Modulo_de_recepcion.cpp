@@ -223,6 +223,252 @@ void RegistrarCliente(int bandera)
 	}
 }
 
+void RegistrarTurno(int bandera)
+{
+	system("cls");
+	 //recuadro principal 
+	for (int x=1; x<=100; x++)
+	{  
+		gotoxy(x,0); printf("%c",177);
+		gotoxy(x,24); printf("%c",177);
+		
+		if(x<=24)
+		{
+			gotoxy(1,x); printf("%c",177); 
+			gotoxy(100,x); printf("%c",177); 
+		}
+	}
+	/////********************Declaracion de variables**********************////
+	FILE *arch4, *arch3; int dniCliente, confirmaturno, elCliente, IdProfesional; Cliente reg4; 
+	Turnos reg3;
+	arch3=fopen("Turnos.dat","a+b"); 
+	arch4=fopen("Clientes.dat","a+b");
+	if(arch3==NULL||arch4==NULL)
+	{
+		gotoxy(2,2); printf("*Error en el sistema*");
+		gotoxy(2,3); exit(1);
+	}
+	/////********************Verificacion del inicio de Sesion**********************////
+	if(bandera==0)
+	{
+		gotoxy(2,4); printf("No ha iniciado sesion");
+		
+	}
+	else
+	{ /////********************Ingreso de los datos**********************////
+		elCliente=0;
+		gotoxy(2,4);printf("Ingrese nro de DNI del Cliente: "); scanf("%d",&dniCliente);
+		gotoxy(2,4);printf("                                                                         ");
+		/////********************Busqueda de los datos en los archivos**********************////
+		fread(&reg4,sizeof(Cliente),1,arch4);
+		while(!feof(arch4)&&elCliente==0)
+		{
+			if(dniCliente==reg4.DNI_Cliente)
+			{   /////********************Muestra de los datos encontrados**********************////
+				elCliente=1;
+				gotoxy(2,4); printf("Nombre del Cliente:                                            ");
+				gotoxy(2,5); puts(reg4.NombreCliente);
+				gotoxy(2,6); printf("Direccion: ");
+				gotoxy(2,7); puts(reg4.Domicilio);
+				gotoxy(2,10); printf("Confirmar Turno? 1-si 2-no : ");
+				scanf("%d",&confirmaturno);
+				
+				if(confirmaturno==1)
+				{   /////********************Confirmacion y registro del turno**********************////
+					gotoxy(2,4); printf("                                                           ");
+					gotoxy(2,5); printf("                                                           ");
+					gotoxy(2,6); printf("                                                           ");
+					gotoxy(2,7); printf("                                                           ");
+					gotoxy(2,8); printf("                                                           ");
+					gotoxy(2,9); printf("                                                           ");
+					gotoxy(2,10); printf("                                                          ");
+					gotoxy(2,4); printf("Fecha para el turno: ");
+					gotoxy(2,5); printf("Dia: "); scanf("%d",&reg3.fecha.dd); 
+					gotoxy(2,6); printf("Mes: "); scanf("%d",&reg3.fecha.mm);
+					gotoxy(2,7); printf("Anio: "); scanf("%d",&reg3.fecha.aaaa);
+					gotoxy(2,8); printf("ID del Profesional con quien se atendera: "); scanf("%d",&reg3.IdProfesional);
+					reg3.edadCliente= reg3.fecha.aaaa-reg4.fechanacimiento.aaaa;
+					reg3.dniCliente=reg4.DNI_Cliente;
+					reg3.fueatendido=2;
+					fwrite(&reg3,sizeof(Turnos),1,arch3);
+					gotoxy(2,10); printf("El turno fue cargado con exito");
+					
+				}
+				else
+				{
+					gotoxy(2,10); printf("                                                         ");
+					gotoxy(2,10);printf("Turno no registrado");
+					
+				}
+			}
+		fread(&reg4,sizeof(Cliente),1,arch4);	
+		}
+		/////********************Mensaje de datos no encontrados**********************////
+		if(elCliente==0)
+		{
+			gotoxy(2,4); printf("No hay Cliente con ese dni en el sistema");
+		}
+		
+	}
+	fclose(arch3); fclose(arch4);
+	gotoxy(2,12); system("pause");
+}
+
+void InformeDeAtenciones(int bandera)
+{
+	system("cls");
+	 //recuadro principal 
+	for (int x=1; x<=100; x++)
+	{  
+		gotoxy(x,0); printf("%c",177);
+		gotoxy(x,24); printf("%c",177);
+		
+		if(x<=24)
+		{
+			gotoxy(1,x); printf("%c",177); 
+			gotoxy(100,x); printf("%c",177); 
+		}
+	}
+	/////********************Declaracion de las variables**********************////
+	FILE *arch1, *arch3, *arch4; int dia, mes, anio, IdProfesional, existenlosdatos;
+	Profesionales reg1; Cliente reg4; Turnos reg3;
+	/////********************Apertura de archivos**********************////
+	arch1=fopen("Profesionales.dat","a+b");
+	arch3=fopen("Turnos.dat","a+b");
+	arch4=fopen("Clientes.dat","a+b");
+	/////********************Verificacion de archivos**********************////
+	if(arch1==NULL||arch3==NULL||arch4==NULL)
+	{
+			gotoxy(2,4);printf("*Error del sistema*");
+			gotoxy(2,5);exit(1);
+	}
+	/////********************Verificacion de inicio de sesion**********************////
+	if(bandera==0)
+	{
+		gotoxy(2,4); printf("No ha iniciado sesion");
+		gotoxy(2,5); system("pause");
+		gotoxy(2,4);printf("                                                                      ");
+		gotoxy(2,5);printf("                                                                             ");
+	}
+	else
+	{   /////********************Ingreso de los datos**********************////
+		gotoxy(2,4);printf("Ingrese ID del Profesional:  ");
+		scanf("%d",&IdProfesional);
+	    gotoxy(2,5);printf("Fecha de atencion: ");
+		gotoxy(2,6);printf(" Dia: "); 
+		scanf("%d",&dia);
+		gotoxy(2,7);printf(" Mes: ");
+		scanf("%d",&mes);
+		gotoxy(2,8);printf(" Anio: ");
+		scanf("%d",&anio);
+		/////********************Busqueda de los datos**********************////
+		existenlosdatos=0;
+		fread(&reg3,sizeof(Turnos),1,arch3);
+		while(!feof(arch3))
+		{
+		
+				if(reg3.fueatendido==1&&IdProfesional==reg3.IdProfesional&&reg3.fecha.dd==dia&&reg3.fecha.mm==mes&&reg3.fecha.aaaa==anio)
+				{
+					fread(&reg1,sizeof(Profesionales),1,arch1);
+					while(!feof(arch1))
+					{
+						if(reg1.IdProfesional==IdProfesional)
+						{
+							fread(&reg4,sizeof(Cliente),1,arch4);
+							while(!feof(arch4))
+							{
+								if(reg4.DNI_Cliente==reg3.dniCliente)
+								{ /////********************Muestra de la atencion de la fecha**********************////
+									existenlosdatos=1;
+									gotoxy(2,10);printf("Nombre del Profesional: ");
+									gotoxy(2,11);puts(reg1.ApellidoNombre);
+									gotoxy(2,12);printf("Cliente atendido en la fecha: ");
+									gotoxy(2,13);puts(reg4.NombreCliente);
+									gotoxy(2,14);printf("DNI: %d",reg4.DNI_Cliente);
+									gotoxy(2,16);printf("Detalle de atencion: ");
+									gotoxy(2,17);puts(reg3.DetalleAtencion);
+									gotoxy(2,18); system("pause");
+									gotoxy(2,10);printf("                                             ");
+									gotoxy(2,11);printf("                                             ");
+									gotoxy(2,12);printf("                                             ");
+									gotoxy(2,13);printf("                                             ");
+									gotoxy(2,14);printf("                                             ");
+									gotoxy(2,15);printf("                                             ");
+									gotoxy(2,16);printf("                                             ");
+									gotoxy(2,17);printf("                                                                                                                                                        ");
+									gotoxy(2,18);printf("                                             ");
+									
+								}
+					    	fread(&reg4,sizeof(Cliente),1,arch4);
+							}
+							rewind(arch4);
+						}
+					fread(&reg1,sizeof(Profesionales),1,arch1);
+					}
+					rewind(arch1);
+			}
+		fread(&reg3,sizeof(Turnos),1,arch3);	
+		}
+		/////********************Mensaje de que los datos se encontraron y se mostraron**********************////
+		if(existenlosdatos==1)
+		{
+			gotoxy(2,4);printf("                                             ");
+			gotoxy(2,5);printf("                                             ");
+			gotoxy(2,6);printf("                                             ");
+			gotoxy(2,7);printf("                                             ");
+			gotoxy(2,8);printf("                                             ");
+			gotoxy(2,10);printf("Operacion realizada sin errores");
+		}
+		/////********************Mensaje de que los datos no se encontraron**********************////
+		if(existenlosdatos==0)
+		{
+			gotoxy(2,10);printf("La ID no esta en el sistema/ No hay atenciones en la fecha");
+		}
+		fclose(arch1); fclose(arch3); fclose(arch4);
+		gotoxy(2,20);
+		system("pause");		
+	}
+}
+
+void fin()
+{
+	system("cls");
+		 //recuadro principal 
+	for (int x=1; x<=100; x++)
+	{  
+		gotoxy(x,0); printf("%c",177);
+		gotoxy(x,24); printf("%c",177);
+		
+		if(x<=24)
+		{
+			gotoxy(1,x); printf("%c",177); 
+			gotoxy(100,x); printf("%c",177); 
+		}
+	}
+	gotoxy(2,2); printf("***FIN DEL PROGRAMA***\n\n"); 
+	gotoxy(2,4); system("pause");
+	 
+}
+
+void error()
+{
+	system("cls");
+		 //recuadro principal 
+	for (int x=1; x<=100; x++)
+	{  
+		gotoxy(x,0); printf("%c",177);
+		gotoxy(x,24); printf("%c",177);
+		
+		if(x<=24)
+		{
+			gotoxy(1,x); printf("%c",177); 
+			gotoxy(100,x); printf("%c",177); 
+		}
+	}
+	gotoxy(2,2); printf("***LA OPCION NO ES VALIDA***\n\n");
+	gotoxy(2,4);system("pause");
+}
+
 
 main()
 {
