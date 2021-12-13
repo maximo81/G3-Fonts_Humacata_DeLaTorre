@@ -92,6 +92,87 @@ int MENUPRINCIPAL()
 }
 
 
+void InicioDeSesion(int &bandera)
+{
+	system("cls");
+	 //recuadro principal 
+	for (int x=1; x<=100; x++)
+	{  
+		gotoxy(x,0); printf("%c",177);
+		gotoxy(x,24); printf("%c",177);
+		
+		if(x<=24)
+		{
+			gotoxy(1,x); printf("%c",177); 
+			gotoxy(100,x); printf("%c",177); 
+		}
+	}
+	
+	char nameuser[10], passuser[32], usuario[30]; 
+	FILE *arch2;int clavecorrecta, usuariocorrecto;
+	CuentasDeUsuarios usu;
+	
+	arch2=fopen("Recepcionistas.dat","a+b");
+	
+	if(arch2==NULL)
+	{
+		gotoxy(2,2); printf("Error en el programa");
+	}
+	else
+	{
+		gotoxy(2,4); printf("Ingrese nombre de usuario: ");
+		_flushall();
+		gets(nameuser);
+		gotoxy(2,5); printf("Clave de usuario: ");
+		_flushall();
+		gets(passuser);
+		bandera=0;
+		fread(&usu,sizeof(CuentasDeUsuarios),1,arch2);
+		
+		while(!feof(arch2))
+		{
+			usuariocorrecto=strcmp(nameuser, usu.user);
+			clavecorrecta=strcmp(passuser, usu.password);
+			
+			if(clavecorrecta==0&&usuariocorrecto==0)
+			{
+				strcpy(usuario,usu.ApellidoNombre);
+				bandera=1;
+			}
+			
+			fread(&usu,sizeof(CuentasDeUsuarios),1,arch2);	
+		}
+		
+		if(bandera==1)
+		{
+			strcat(usuario," !");
+			gotoxy(2,4);printf("                                                    ");
+			gotoxy(2,5); printf("                                                    ");
+			gotoxy(2,4); printf("Bienvenido/a: ");
+			gotoxy(16,4);puts(usuario);
+			gotoxy(2,5); system("pause");
+			gotoxy(2,4);printf("                                                               ");
+			gotoxy(2,5); printf("                                                              ");
+		}
+		
+		if(bandera==0)
+		{
+			
+			gotoxy(2,4);printf("                                                    ");
+			gotoxy(2,5); printf("                                                    ");
+			gotoxy(2,4); printf("Clave o usuario incorrecto");
+			gotoxy(2,5); system("pause");
+			gotoxy(2,4);printf("                                                    ");
+			gotoxy(2,5); printf("                                                    ");
+			
+		}
+		
+	}
+	gotoxy(2,20); system("pause");
+	
+}
+
+
 
 
 
